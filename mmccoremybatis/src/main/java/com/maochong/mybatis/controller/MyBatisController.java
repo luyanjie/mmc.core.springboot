@@ -3,13 +3,13 @@ package com.maochong.mybatis.controller;
 import com.maochong.mybatis.common.enums.DataBaseTypeEnum;
 import com.maochong.mybatis.dao.BlogMapper;
 import com.maochong.mybatis.dao.LessonUserMapper;
-import com.maochong.mybatis.dao.UserMapper;
 import com.maochong.mybatis.entity.BlogEntity;
 import com.maochong.mybatis.entity.LessonUser;
 import com.maochong.mybatis.entity.LessonUserBlogEntity;
 import com.maochong.mybatis.entity.User;
 import com.maochong.mybatis.entity.typehandler.BlogTypeHandlerEntity;
 import com.maochong.mybatis.entity.typehandler.Content;
+import com.maochong.mybatis.service.mapper.UserMapperService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +34,7 @@ public class MyBatisController {
     LessonUserMapper lessonUserMapper;
 
     @Autowired
-    UserMapper userMapper;
+    UserMapperService userMapper;
 
     @Autowired
     BlogMapper blogMapper;
@@ -160,6 +160,15 @@ public class MyBatisController {
     }
 
     /**
+     * http://localhost:8081/mybatis/lesson/select/list/join/6
+     * */
+    @RequestMapping("/lesson/select/list/blog/{id}")
+    public List<LessonUserBlogEntity> findByIdBlogList(@PathVariable("id") Integer id)
+    {
+        return blogMapper.getUsetBlogList(id);
+    }
+
+    /**
      * http://localhost:8081/mybatis/lesson/delete/5
      * */
     @RequestMapping("/lesson/delete/{id}")
@@ -177,10 +186,22 @@ public class MyBatisController {
         return lessonUserMapper.updateUserFromId(user);
     }
 
-    @RequestMapping("/lesson/find/name/{name}")
-    public LessonUser lessonFindByName(@PathVariable("name") String name)
+    /**
+     * http://localhost:8081/mybatis/lesson/find?name=luyanjie
+     * */
+    @RequestMapping("/lesson/find")
+    public LessonUser lessonFindByName(String name)
     {
         return lessonUserMapper.findByName(name);
+    }
+
+    /**
+     * http://localhost:8081/mybatis/lesson/find/like?name=luyanjie
+     * */
+    @RequestMapping("/lesson/find/like")
+    public List<LessonUser> lessonFindByNameList(String name)
+    {
+        return lessonUserMapper.findByNameList("%"+name+"%");
     }
 
     @RequestMapping("/blog/select/{id}")
@@ -223,13 +244,13 @@ public class MyBatisController {
     public int wanghongAdd(String name, Integer order)
     {
         Assert.notNull(name,"需要name参数");
-        return userMapper.insert(name,order);
+        return userMapper.wanghongAdd(name,order);
     }
 
     @RequestMapping("/wanghong/find/name/{name}")
     public User wangHongFindByName(@PathVariable("name") String name)
     {
-        return userMapper.findByName(name);
+        return userMapper.wangHongFindByName(name);
     }
 }
 

@@ -1,6 +1,8 @@
 package com.maochong.mybatis.dao;
 
 
+import com.maochong.mybatis.common.constant.MyDataSource;
+import com.maochong.mybatis.common.enums.DataSourceType;
 import com.maochong.mybatis.entity.LessonUser;
 import com.maochong.mybatis.entity.typehandler.BlogTypeHandlerEntity;
 import org.apache.ibatis.annotations.*;
@@ -14,6 +16,7 @@ import java.util.List;
  * @author jokin
  * */
 @Mapper
+@MyDataSource(DataSourceType.Master)
 public interface LessonUserMapper {
     /**
      * 根据name获取数据
@@ -22,6 +25,18 @@ public interface LessonUserMapper {
      * */
     @Select("SELECT * FROM lesson.`user` WHERE `userName` = #{name}")
     LessonUser findByName(@Param("name") String name);
+
+    /**
+     * 模糊查询
+     * 方法一：需要数据库支持 CONCAT方法，可以直接传需要查的内容
+     * ("SELECT * FROM lesson.`user` WHERE `userName` like CONCAT('%',#{name},'%')")
+     * 方法二：传入值就是模糊范例，如：%name%
+     *  ("SELECT * FROM lesson.`user` WHERE `userName` like #{name}")
+     *  @param name 传入值
+     *              @return list
+     * */
+    @Select("SELECT * FROM lesson.`user` WHERE `userName` like #{name}")
+    List<LessonUser> findByNameList(@Param("name") String name);
 
     /**
      * 根据Id获取数据

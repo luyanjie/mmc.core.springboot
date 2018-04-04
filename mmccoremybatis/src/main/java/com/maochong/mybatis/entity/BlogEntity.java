@@ -18,4 +18,5 @@ public class BlogEntity implements Serializable {
     private String date;
     private String authorName;
     private String content;
+    private String dataBase;
 }

@@ -1,36 +1,76 @@
 package com.maochong.mybatis.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.maochong.mybatis.common.enums.DataSourceType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
-import java.util.Properties;
+import java.util.*;
 
+/**
+ * @author jokin
+ * */
 @Configuration
 public class DataSourceConfiguration {
 
     /**
      * 多数据源配置查看：https://blog.csdn.net/ichsonx/article/details/52053003
      * https://blog.csdn.net/ichsonx/article/details/52061608
+     * https://blog.csdn.net/xiazai353503200/article/details/79390879  为主
      * */
     private Logger logger = LoggerFactory.getLogger(DataSourceConfiguration.class);
 
-    @Bean(name = "primaryDataSource")
-    @Qualifier("primaryDataSource")
-    //@ConfigurationProperties(prefix="spring.datasourcejdbc.primary")
+    /**
+     * \@Primary和@Qualifier这两个注解的意思:
+     *      \@Primary：  意思是在众多相同的bean中，优先使用用@Primary注解的bean.
+     *      \@Qualifier ： 这个注解则指定某个bean有没有资格进行注入。
+     * */
+    @Bean(name = "master")
     public DataSource primaryDataSource() {
+        System.out.println("主配");
+        return druidDataSource("jdbc:mysql://127.0.0.1:3306/lesson?useSSL=false&serverTimezone=UTC","root","jie88854859","com.mysql.cj.jdbc.Driver");
+    }
+
+    @Bean(name = "slave")
+    public DataSource secondaryDataSource() {
+        System.out.println("从配");
+        return druidDataSource("jdbc:mysql://127.0.0.1:3306/wanghong?useSSL=false&serverTimezone=UTC","root","jie88854859","com.mysql.cj.jdbc.Driver");
+    }
+
+    @Bean(name="dynamicDataSource")
+    @Qualifier("dynamicDataSource")
+    @Primary
+    public DataSource dataSource() {
+        DynamicDataSource dynamicDataSource = new DynamicDataSource();
+        DataSource master = primaryDataSource();
+        DataSource slave = secondaryDataSource();
+        //设置默认数据源
+        dynamicDataSource.setDefaultTargetDataSource(master);
+        //配置多数据源
+        Map<Object,Object> map = new HashMap<>();
+        // key需要跟ThreadLocal中的值对应
+        map.put(DataSourceType.Master.getName(), master);
+        map.put(DataSourceType.Slave.getName(), slave);
+        dynamicDataSource.setTargetDataSources(map);
+        return dynamicDataSource;
+    }
+
+
+    private DruidDataSource druidDataSource(String url,String userName,String password,String driverClassName)
+    {
         // 使用DruidDataSource连接串配置
         DruidDataSource datasource = new DruidDataSource();
-        datasource.setUrl("jdbc:mysql://127.0.0.1:3306/lesson?useSSL=false&serverTimezone=UTC");
-        datasource.setUsername("root");
-        datasource.setPassword("jie88854859");
-        datasource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        datasource.setUrl(url);
+        datasource.setUsername(userName);
+        datasource.setPassword(password);
+        datasource.setDriverClassName(driverClassName);
         // 初始化大小，最小，最大
         datasource.setInitialSize(5);
         datasource.setMinIdle(5);
@@ -61,9 +101,7 @@ public class DataSourceConfiguration {
         }
 
         return datasource;
-
-
-//        return DataSourceBuilder.create()
+        //        return DataSourceBuilder.create()
 //                .url("jdbc:mysql://127.0.0.1:3306/lesson?useSSL=false&serverTimezone=UTC")
 //                .username("root")
 //                .password("jie88854859")
@@ -72,28 +110,4 @@ public class DataSourceConfiguration {
 //                .build();
     }
 
-
-
-//    @Bean(name = "secondaryDataSource")
-//    @Qualifier("secondaryDataSource")
-//    @Primary
-//    // @ConfigurationProperties(prefix="spring.datasourcejdbc.secondary")
-//    public DataSource secondaryDataSource() {
-//        return DataSourceBuilder.create()
-//                .url("jdbc:mysql://127.0.0.1:3306/wanghong?useSSL=false&serverTimezone=UTC")
-//                .username("root")
-//                .password("jie88854859")
-//                .driverClassName("com.mysql.cj.jdbc.Driver")
-//                .build();
-//    }
-
-    @Bean(name = "primaryJdbcTemplate")
-    public JdbcTemplate primaryJdbcTemplate(@Qualifier("primaryDataSource") DataSource dataSource) {
-        return new JdbcTemplate(dataSource);
-    }
-
-//    @Bean(name = "secondaryJdbcTemplate")
-//    public JdbcTemplate secondaryJdbcTemplate(@Qualifier("secondaryDataSource") DataSource dataSource) {
-//        return new JdbcTemplate(dataSource);
-//    }
 }

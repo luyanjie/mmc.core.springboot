@@ -1,5 +1,7 @@
 package com.maochong.mybatis.dao;
 
+import com.maochong.mybatis.common.constant.MyDataSource;
+import com.maochong.mybatis.common.enums.DataSourceType;
 import com.maochong.mybatis.entity.BlogEntity;
 import com.maochong.mybatis.entity.LessonUserBlogEntity;
 import org.apache.ibatis.annotations.*;
@@ -13,6 +15,7 @@ import java.util.List;
  * */
 @Mapper
 // @CacheNamespace(size=100)
+@MyDataSource(DataSourceType.Master)
 public interface BlogMapper {
 
     @SelectProvider(type = BlogSqlProvider.class,method = "getSql")
@@ -47,10 +50,24 @@ public interface BlogMapper {
             @Result(property = "userName",column = "userName",javaType = String.class),
             @Result(property = "userAge",column = "userAge",javaType = Integer.class),
             @Result(property = "userAddress",column = "userAddress",javaType = String.class),
-            @Result(property = "blogs",javaType = List.class,column = "id",many = @Many(select = "com.maochong.mybatis.service.BlogMapper.getUserBlog")), // 一对多
-            @Result(property = "blog",javaType = BlogEntity.class,column = "id",one = @One(select = "com.maochong.mybatis.service.BlogMapper.getUserBlogOne")), // 一对一
+            @Result(property = "blogs",javaType = List.class,column = "id",many = @Many(select = "com.maochong.mybatis.dao.BlogMapper.getUserBlog")), // 一对多
+            @Result(property = "blog",javaType = BlogEntity.class,column = "id",one = @One(select = "com.maochong.mybatis.dao.BlogMapper.getUserBlogOne")), // 一对一
     })
     LessonUserBlogEntity getUsetBlogs(@Param("id") Integer id);
+
+    /**
+     * 实现多对多
+     * */
+    @Select("SELECT * FROM `user` where id>#{id}")
+    @Results(value = {
+            @Result(property = "id",column = "id",javaType=Integer.class,jdbcType=JdbcType.INTEGER),
+            @Result(property = "userName",column = "userName",javaType = String.class),
+            @Result(property = "userAge",column = "userAge",javaType = Integer.class),
+            @Result(property = "userAddress",column = "userAddress",javaType = String.class),
+            @Result(property = "blogs",javaType = List.class,column = "id",many = @Many(select = "com.maochong.mybatis.dao.BlogMapper.getUserBlog")), // 一对多
+            @Result(property = "blog",javaType = BlogEntity.class,column = "id",one = @One(select = "com.maochong.mybatis.dao.BlogMapper.getUserBlogOne")), // 一对一
+    })
+    List<LessonUserBlogEntity> getUsetBlogList(@Param("id") Integer id);
     /**
      * 这里调用resultMap，这个是SQL配置文件中的,必须该SQL配置文件与本接口有相同的全限定名
      * 注意文件中的namespace路径必须是使用@resultMap的类路径

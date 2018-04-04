@@ -1,5 +1,7 @@
 package com.maochong.mybatis.dao;
 
+import com.maochong.mybatis.common.constant.MyDataSource;
+import com.maochong.mybatis.common.enums.DataSourceType;
 import com.maochong.mybatis.entity.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -9,6 +11,7 @@ import org.apache.ibatis.annotations.Select;
 /**
  * WangHong数据库操作
  * @author jokin
+ * 这个类无法在DataSourceAspect中拿到注解， 原因是这个类在事务管理时，被做了类代理。根据class反射 拿到的是代理类，所以拿不到对应的注解。
  * */
 @Mapper
 public interface UserMapper {
