@@ -17,6 +17,7 @@
     <modules>
         <module>mmccorehelloword</module>
         <module>mmccoremybatis</module>
+        <module>mmccorethread</module>
     </modules>
     <dependencies>
         <dependency>
