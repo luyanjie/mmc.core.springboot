@@ -4,23 +4,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Date;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 
-/**
- * @author jokin
- * */
-public class CountDownLatchTwoService {
-    private final static Logger logger = LoggerFactory.getLogger(CountDownLatchTwoService.class);
-    public static class WorkingThread extends Thread {
+public class CyclicBarrierService {
+    private final static Logger logger = LoggerFactory.getLogger(CyclicBarrierService.class);
+    public class WorkingThread implements Runnable {
         private final String mThreadName;
         private final int mSleepTime;
-        private static CountDownLatch countDownLatch;
 
-        public WorkingThread(String mThreadName,int mSleepTime,CountDownLatch countDownLatch)
+        public WorkingThread(String mThreadName,int mSleepTime)
         {
             this.mSleepTime = mSleepTime;
             this.mThreadName = mThreadName;
-            this.countDownLatch = countDownLatch;
         }
 
         @Override
@@ -33,25 +29,26 @@ public class CountDownLatchTwoService {
             {
                 logger.error(ex.getMessage());
             }
-            countDownLatch.countDown();// 计数器减一，
-            System.out.println(countDownLatch.getCount());
             System.out.println(String.format(new Date().toString()+"  %s End ",mThreadName));
         }
     }
 
-    public static class SampleThread extends Thread{
+    public class SampleThread implements Runnable{
 
         private  String mThreadName = "mThreadName";
-        public static CountDownLatch countDownLatch;
-
+        private CyclicBarrier cyclicBarrier = null;
+        public SampleThread( CyclicBarrier cyclicBarrier,String mThreadName){
+            this.cyclicBarrier = cyclicBarrier;
+            this.mThreadName = mThreadName;
+        }
         @Override
         public void run(){
             System.out.println(String.format(new Date().toString()+"   %s Start ",mThreadName));
             try {
-                System.out.println(countDownLatch.getCount());
-                countDownLatch.await();// 程序等待在这，知道countDownLatch计数器减为 0
+                // System.out.println(cyclicBarrier.getParties());
+                cyclicBarrier.await();// 程序等待在这，知道countDownLatch计数器减为 0
             }
-            catch (InterruptedException ex)
+            catch (BrokenBarrierException | InterruptedException ex)
             {
                 logger.error(" SamplieThread" + ex.getMessage());
             }
