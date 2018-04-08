@@ -14,10 +14,18 @@
     <artifactId>mmc-core-springboot</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+    </properties>
     <modules>
         <module>mmccorehelloword</module>
         <module>mmccoremybatis</module>
         <module>mmccorethread</module>
+        <module>mmc.core.dubbo.client</module>
+        <module>mmc.core.dubbo.interface</module>
+        <module>mmc.core.dubbo.service</module>
     </modules>
     <dependencies>
         <dependency>
