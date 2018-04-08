@@ -42,9 +42,6 @@ public class DataSourceAspect {
         try {
 
             Method m = classz.getMethod(method, parameterTypes);
-            String name = m.getName();
-            boolean bl = m.isAnnotationPresent(MyDataSource.class);
-            MyDataSource myDataSource = m.getAnnotation(MyDataSource.class);
             if (m != null && m.isAnnotationPresent(MyDataSource.class)) {
                 MyDataSource data =  m.getAnnotation(MyDataSource.class);
                 JdbcContextHolder.putDataSource(data.value().getName());

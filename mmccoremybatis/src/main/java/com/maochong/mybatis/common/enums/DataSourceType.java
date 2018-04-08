@@ -5,9 +5,9 @@ package com.maochong.mybatis.common.enums;
  * */
 public enum DataSourceType {
 
-    // 主表
+    // 默认库
     Master("master"),
-    // 从表
+    // 第二个数据库
     Slave("slave");
 
     private String name;

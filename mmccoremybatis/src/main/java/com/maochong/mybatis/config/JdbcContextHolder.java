@@ -1,5 +1,7 @@
 package com.maochong.mybatis.config;
 
+import com.maochong.mybatis.common.enums.DataSourceType;
+
 /**
  * 动态数据源的上下文 threadlocal
  * JdbcContextHolder
@@ -16,7 +18,8 @@ public class JdbcContextHolder {
     }
 
     public static String getDataSource() {
-        return local.get();
+        String dbName = local.get();
+        return dbName!=null?dbName:DataSourceType.Master.getName();
     }
 
 }

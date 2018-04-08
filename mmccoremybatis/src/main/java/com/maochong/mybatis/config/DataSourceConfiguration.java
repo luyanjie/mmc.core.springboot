@@ -28,8 +28,9 @@ public class DataSourceConfiguration {
     private Logger logger = LoggerFactory.getLogger(DataSourceConfiguration.class);
 
     /**
+     * 配置为默认库
      * \@Primary和@Qualifier这两个注解的意思:
-     *      \@Primary：  意思是在众多相同的bean中，优先使用用@Primary注解的bean.
+     *      \@Primary：  意思是在众多相同的bean中，优先使用@Primary注解的bean.
      *      \@Qualifier ： 这个注解则指定某个bean有没有资格进行注入。
      * */
     @Bean(name = "master")
@@ -38,6 +39,9 @@ public class DataSourceConfiguration {
         return druidDataSource("jdbc:mysql://127.0.0.1:3306/lesson?useSSL=false&serverTimezone=UTC","root","jie88854859","com.mysql.cj.jdbc.Driver");
     }
 
+    /**
+     * 第二个数据库配置
+     * */
     @Bean(name = "slave")
     public DataSource secondaryDataSource() {
         System.out.println("从配");

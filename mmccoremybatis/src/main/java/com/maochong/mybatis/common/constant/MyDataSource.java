@@ -18,5 +18,5 @@ import static java.lang.annotation.ElementType.TYPE;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({TYPE,METHOD})
 public @interface MyDataSource {
-    DataSourceType value() default DataSourceType.Master;	//默认主表
+    DataSourceType value() default DataSourceType.Master;	//默认库
 }
