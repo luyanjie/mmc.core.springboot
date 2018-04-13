@@ -9,7 +9,7 @@ spring:
       name: Consumer
     registry:                 #注册中心配置，用于配置连接注册中心相关信息。
       address: zookeeper://192.168.40.155:2181
-    protocol:     #协议配置，用于配置提供服务的协议信息，协议由提供方指定，消费方被动接受。
-      name: dubbo
-      port: 20880
+#    protocol:     #协议配置，用于配置提供服务的协议信息，协议由提供方指定，消费方被动接受。
+#      name: rmi
+#      port: 20881
     scan: org.spring.springboot.service  #服务暴露与发现消费所在的package

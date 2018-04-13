@@ -5,6 +5,9 @@ import com.maochong.thread.service.lock.ReentrantReadWriteLockService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * @author jokin
  * @date 2018-04-06
@@ -65,18 +68,27 @@ public class ThreadController {
     {
         System.out.println("-------------非公平锁----------");
         ReentrantLockService.NoFair noFair = new ReentrantLockService().new NoFair();
+
         // 非公平锁
         Runnable runnable = () -> {
             System.out.println("开始运行的线程名称：" + Thread.currentThread().getName());
             noFair.serviceMethod();
         };
-        Thread[] threadArray = new Thread[10];
-        for (int i = 0; i < 10; i++) {
-            threadArray[i] = new Thread(runnable);
+
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        for(int i=0;i<10;i++)
+        {
+            executorService.submit(runnable);
         }
-        for (int i = 0; i < 10; i++) {
-            threadArray[i].start();
-        }
+        executorService.shutdown();
+//        Thread[] threadArray = new Thread[10];
+//        for (int i = 0; i < 10; i++) {
+//            threadArray[i] = new Thread(runnable);
+//        }
+//
+//        for (int i = 0; i < 10; i++) {
+//            threadArray[i].start();
+//        }
         return "success";
     }
 }

@@ -46,7 +46,7 @@ public class CyclicBarrierService {
             System.out.println(String.format(new Date().toString()+"   %s Start ",mThreadName));
             try {
                 // System.out.println(cyclicBarrier.getParties());
-                cyclicBarrier.await();// 程序等待在这，知道countDownLatch计数器减为 0
+                cyclicBarrier.await();// 线程执行等待在这
             }
             catch (BrokenBarrierException | InterruptedException ex)
             {

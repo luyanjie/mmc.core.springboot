@@ -5,12 +5,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-/**
- * 系统提供的四种线程池
- * @author jokin
- * @date 2018-04-06
- * */
-public class ExecutorsService implements MyThread {
+public class MyExecutorService implements MyThread {
     @Override
     public void executor() {
         //使用Executors创建线程池（最后使用ThreadPoolExecutor 手动创建线程池）

@@ -18,4 +18,12 @@ public class UserServiceImpl {
         return user;
     }
 
+    public void register()
+    {
+        User user = new User();
+        user.setOrder(1);
+        user.setName("ni hao");
+        user.setId(100L);
+        userService.register(user);
+    }
 }

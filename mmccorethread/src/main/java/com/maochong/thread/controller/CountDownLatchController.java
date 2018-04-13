@@ -5,6 +5,7 @@ import com.maochong.thread.service.CyclicBarrierService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -19,15 +20,57 @@ public class CountDownLatchController {
     @RequestMapping("/count/down/latch")
     public String countDownLatchOne()
     {
-        System.out.println("==============start============");
-        // 执行会进入awit,打印 "SampleThread Start"
-        new CountDownLatchService.SampleThread(2).start();
-        // 执行一次 打印  "countDownLatch1 Start"
-        new CountDownLatchService.WorkingThread("countDownLatch1",5*1000).start();
-        // 执行一次 打印  "countDownLatch2 Start"
-        new CountDownLatchService.WorkingThread("countDownLatch2",10*1000).start();
-        // 等待5s后抛出 "countDownLatch1 End" 等待10s后抛出 "countDownLatch2 End" " SampleThread Enf"
-        System.out.println("==============end============");
+//        System.out.println("==============start============");
+//        // 执行会进入awit,打印 "SampleThread Start"
+//        new CountDownLatchService.SampleThread(2).start();
+//        // 执行一次 打印  "countDownLatch1 Start"
+//        new CountDownLatchService.WorkingThread("countDownLatch1",5*1000).start();
+//        // 执行一次 打印  "countDownLatch2 Start"
+//        new CountDownLatchService.WorkingThread("countDownLatch2",10*1000).start();
+//        // 等待5s后抛出 "countDownLatch1 End" 等待10s后抛出 "countDownLatch2 End" " SampleThread Enf"
+//        System.out.println("==============end============");
+//        return "success";
+        return  countDownLatch();
+    }
+
+    public String countDownLatch()
+    {
+        CountDownLatch countDownLatch = new CountDownLatch(10);
+
+        ExecutorService executorsService = Executors.newFixedThreadPool(10);
+
+        for(int i=0;i<10;i++)
+        {
+            executorsService.submit(()->{
+                try {
+                    System.out.println(Thread.currentThread().getName() + ":start");
+                    countDownLatch.await();
+                }
+                catch (InterruptedException e)
+                {
+                    System.out.println(Thread.currentThread().getName() + ":error");
+                }
+                System.out.println(Thread.currentThread().getName() + ":end");
+            });
+        }
+        executorsService.shutdown();
+
+        for (int i=0;i<10;i++)
+        {
+            try{
+
+                Thread.sleep(500);
+            }
+            catch (InterruptedException e)
+            {
+                return e.getMessage();
+            }
+            finally {
+                countDownLatch.countDown();
+
+            }
+        }
+
         return "success";
     }
 

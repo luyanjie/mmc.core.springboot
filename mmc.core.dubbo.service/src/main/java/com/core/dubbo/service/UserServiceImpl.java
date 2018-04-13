@@ -8,7 +8,7 @@ import com.core.dubbo.domain.User;
  * @author jokin
  * @data 2018-04-08
  * */
-@Service(version = "1.0.0")
+@Service(version = "1.0.0",provider = "providerConfig1")
 public class UserServiceImpl implements UserService {
     @Override
     public void register(User user) {
