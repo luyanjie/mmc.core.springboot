@@ -16,7 +16,6 @@ import java.util.List;
  * @author jokin
  * */
 @Mapper
-@MyDataSource(DataSourceType.Master)
 public interface LessonUserMapper {
     /**
      * 根据name获取数据
@@ -40,10 +39,10 @@ public interface LessonUserMapper {
 
     /**
      * 根据Id获取数据
-     * @param id 玩家Id
+     * @param id 玩家Id,指定jdbc的类型 jdbcType = INTEGER
      *           @return LessonUser实体类
      * */
-    @Select("SELECT * FROM lesson.`user` WHERE  id= #{id}")
+    @Select({"SELECT * FROM lesson.`user` WHERE  id= #{id,jdbcType=INTEGER}}"})
     LessonUser findById(@Param("id") Integer id);
 
     /**
@@ -80,7 +79,6 @@ public interface LessonUserMapper {
      *            @return int 返回成功条数
      * */
     @Insert("INSERT INTO lesson.`user`(`userName`, `userAge`,userAddress) VALUES(#{name}, #{age},#{userAddress})")
-    @Options(useGeneratedKeys = true,keyProperty = "id")
     int insert(@Param("name") String name, @Param("age") Integer age,@Param("userAddress") String userAddress);
 
     /**
@@ -107,13 +105,24 @@ public interface LessonUserMapper {
     BlogTypeHandlerEntity selectBlog(@Param("id") Integer id);
 
     /**
-     * 插入数据，返回主键存入到lessonUser 的Id字段
+     * 插入数据，使用@Options返回主键存入到lessonUser 的Id字段
      * @param lessonUser  User实体类
      *                    @return int 返回成功条数
      * */
     @Insert("INSERT INTO lesson.`user`(`userName`, `userAge`,userAddress) VALUES(#{userName}, #{userAge},#{userAddress})")
     @Options(useGeneratedKeys = true,keyProperty = "id")
     int insertKey(LessonUser lessonUser);
+
+    /**
+     * 插入数据，使用@SelectKey返回主键存入到lessonUser 的Id字段
+     * 如果@Options 和 @SelectKey 同时存在，看源码会使用@SelectKey的方式返回
+     * @param lessonUser  User实体类
+     *                    @return int 返回成功条数
+     * */
+    @Insert("INSERT INTO lesson.`user`(`userName`, `userAge`,userAddress) VALUES(#{userName}, #{userAge},#{userAddress})")
+    //@Options(useGeneratedKeys = true,keyProperty = "id")
+    @SelectKey(keyProperty = "id",before = false,resultType = Integer.class,statement ="SELECT LAST_INSERT_ID()",keyColumn = "id")
+    int insertReturnGeneratedKeys(LessonUser lessonUser);
 
     /**
      * 批量插入数据

@@ -27,12 +27,18 @@
     <!--<setting name="defaultStatementTimeout" value="25000" />-->
     <!--</settings>-->
 
+
     <!--重写类型处理器-->
     <typeHandlers>
         <typeHandler handler="com.maochong.mybatis.common.typehandler.ContentTypeHandler"/>
-        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="java.math.RoundingMode"/>
+        <!--<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="java.math.RoundingMode"/>-->
         <!--<typeHandler handler="com.maochong.mybatis.common.typehandler.ExampleTypeHandler"/>-->
     </typeHandlers>
+    <plugins>
+        <plugin interceptor="com.maochong.mybatis.plugins.LessonPlugin">
+            <property name="aaa" value="bbb"></property>
+        </plugin>
+    </plugins>
     <!-- 分页助手 -->
     <!--<plugins>-->
     <!--<plugin interceptor="com.github.pagehelper.PageHelper">-->

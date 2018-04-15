@@ -6,8 +6,8 @@ import java.io.Serializable;
  * User 实体类
  * */
 public class User implements Serializable {
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 5042763729839962715L;
     private Long id;
     private String name;
     private Integer order;

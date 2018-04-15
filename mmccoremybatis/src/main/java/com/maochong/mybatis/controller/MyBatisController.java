@@ -117,10 +117,22 @@ public class MyBatisController {
 
         System.out.println(lessonUser.getId());
 
+        // 返回主键方式1
         int back = lessonUserMapper.insertKey(lessonUser);
         System.out.println(lessonUser.getId());
+
+
+//        // 返回主键方式2
+//        lessonUser.setUserAddress(address+"1");
+//        lessonUser.setUserName(name+"1");
+//        lessonUser.setUserAge(age+1);
+//        lessonUser.setId(0);
+//        back = lessonUserMapper.insertReturnGeneratedKeys(lessonUser);
+//        System.out.println(lessonUser.getId());
         return back;
     }
+
+
 
     /**
      * http://localhost:8081/mybatis/lesson/select/one/13

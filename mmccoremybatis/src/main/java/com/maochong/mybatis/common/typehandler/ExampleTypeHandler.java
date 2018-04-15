@@ -11,6 +11,7 @@ import java.sql.SQLException;
 
 /**
  * 重写类型处理器或创建自己的类型处理器来处理不支持的或非标准的类型
+ * @MappedJdbcTypes(value = JdbcType.VARCHAR,includeNullJdbcType = true)  就是覆盖默认的 JdbcType.VARCHAR TypeHandler
  * @author jokin
  * */
 @MappedJdbcTypes(value = JdbcType.VARCHAR,includeNullJdbcType = true)

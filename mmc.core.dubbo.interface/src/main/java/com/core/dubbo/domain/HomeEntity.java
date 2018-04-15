@@ -6,8 +6,8 @@ import java.io.Serializable;
  * home 实体类
  * */
 public class HomeEntity  implements Serializable {
-    private static final long serialVersionUID = 10014521241645L;
 
+    private static final long serialVersionUID = -2380372009508125190L;
     private int id;
     private String address;
     private String name;
