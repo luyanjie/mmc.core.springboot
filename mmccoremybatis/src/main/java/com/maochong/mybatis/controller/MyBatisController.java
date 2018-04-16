@@ -3,6 +3,7 @@ package com.maochong.mybatis.controller;
 import com.maochong.mybatis.common.enums.DataBaseTypeEnum;
 import com.maochong.mybatis.dao.BlogMapper;
 import com.maochong.mybatis.dao.LessonUserMapper;
+import com.maochong.mybatis.dao.UserMapper;
 import com.maochong.mybatis.entity.BlogEntity;
 import com.maochong.mybatis.entity.LessonUser;
 import com.maochong.mybatis.entity.LessonUserBlogEntity;
@@ -10,6 +11,10 @@ import com.maochong.mybatis.entity.User;
 import com.maochong.mybatis.entity.typehandler.BlogTypeHandlerEntity;
 import com.maochong.mybatis.entity.typehandler.Content;
 import com.maochong.mybatis.service.mapper.UserMapperService;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -138,9 +144,8 @@ public class MyBatisController {
      * http://localhost:8081/mybatis/lesson/select/one/13
      * */
     @RequestMapping("/lesson/select/one/{id}")
-    @Cacheable(cacheNames = "user",key = "'user'+#id")
-    public LessonUser lessonFindById(@PathVariable("id") Integer id)
-    {
+    // @Cacheable(cacheNames = "user",key = "'user'+#id")
+    public LessonUser lessonFindById(@PathVariable("id") Integer id) {
         return lessonUserMapper.findById(id);
     }
 

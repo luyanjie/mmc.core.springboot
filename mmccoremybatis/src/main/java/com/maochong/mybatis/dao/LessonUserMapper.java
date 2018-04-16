@@ -42,7 +42,7 @@ public interface LessonUserMapper {
      * @param id 玩家Id,指定jdbc的类型 jdbcType = INTEGER
      *           @return LessonUser实体类
      * */
-    @Select({"SELECT * FROM lesson.`user` WHERE  id= #{id,jdbcType=INTEGER}}"})
+    @Select({"SELECT * FROM lesson.`user` WHERE  id= #{id,jdbcType=INTEGER}"})
     LessonUser findById(@Param("id") Integer id);
 
     /**
