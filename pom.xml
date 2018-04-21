@@ -26,6 +26,7 @@
         <module>mmc.core.dubbo.client</module>
         <module>mmc.core.dubbo.interface</module>
         <module>mmc.core.dubbo.service</module>
+        <module>mmc-core-zookeeper</module>
     </modules>
     <dependencies>
         <dependency>
