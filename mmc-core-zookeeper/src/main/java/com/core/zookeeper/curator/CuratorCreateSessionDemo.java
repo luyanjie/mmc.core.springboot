@@ -23,7 +23,7 @@ public class CuratorCreateSessionDemo {
          1. new ExponentialBackoffRetry(1000,3) // 间隔1s，最多重试3次
          2. RetryNTimes(int n, int sleepMsBetweenRetries) 指定最大重试次数
          3. RetryOneTime(int sleepMsBetweenRetry) 仅重试一次
-         4. RetryUnitilElapsed 一直重试知道规定的时间
+         4. RetryUntilElapsed(5000, 1000) 会一直重试直到达到规定时间，第一个参数整个重试不能超过时间，第二个参数重试间隔
         * */
 
         CuratorFramework curatorFramework = CuratorFrameworkFactory.

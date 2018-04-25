@@ -12,13 +12,11 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * zkClient基本方法
+ * @author jokin
  * */
 public class ZkClientApiOperatorDemo {
-    // zookeeper服务器，这是单台，集群的话 用逗号隔开，如：192.168.40.155:2181,192.168.40.156:2181,192.168.40.157:2181
-    private final static String CONNECTING = "192.168.40.155:2181";
-
     public static void main(String[] args) {
-        ZkClient zkClient = new ZkClient(CONNECTING,5000);
+        ZkClient zkClient = ZkClientUtils.getInstance();
         String path = "/jokin";
         boolean bl = zkClient.exists(path);
         System.out.println("判断节点是否存在："+bl);

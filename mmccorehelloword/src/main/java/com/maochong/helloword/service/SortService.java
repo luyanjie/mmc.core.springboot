@@ -28,6 +28,28 @@ public class SortService {
     }
 
     /**
+     * 选择排序
+     * */
+    public void ChoseSort(int num,int[] ints)
+    {
+        for (int i=0;i<num;i++)
+        {
+            int min = i;
+            for(int j=i;j<num;j++)
+            {
+                min = ints[j]<ints[min]?j:min;
+            }
+            if(min==i)
+            {
+                continue;
+            }
+            ints[i] = ints[i]^ints[min];
+            ints[min] = ints[i]^ints[min];
+            ints[i] = ints[i]^ints[min];
+        }
+    }
+
+    /**
      * 插入排序
      * */
     public int[]  insertSort(int num,int[] ints)
