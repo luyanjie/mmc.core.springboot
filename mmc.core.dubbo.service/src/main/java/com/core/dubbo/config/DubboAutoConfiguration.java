@@ -60,12 +60,7 @@ public class DubboAutoConfiguration {
     @Bean(name = "providerConfig1")
     @Primary
     public ProviderConfig providerConfig(ApplicationConfig applicationConfig, RegistryConfig registryConfig) {
-        ProviderConfig providerConfig = new ProviderConfig();
-        providerConfig.setTimeout(1000);
-        providerConfig.setRetries(1);
-        providerConfig.setDelay(-1);
-        providerConfig.setApplication(applicationConfig);
-        providerConfig.setRegistry(registryConfig);
+        ProviderConfig providerConfig = getProvider(applicationConfig,registryConfig);
         providerConfig.setProtocol(this.protocolConfig);
         return providerConfig;
     }
@@ -97,13 +92,18 @@ public class DubboAutoConfiguration {
      */
     @Bean(name = "providerConfig2")
     public ProviderConfig providerConfig2(ApplicationConfig applicationConfig, RegistryConfig registryConfig) {
+        ProviderConfig providerConfig = getProvider(applicationConfig,registryConfig);
+        providerConfig.setProtocol(protocolConfig2);
+        return providerConfig;
+    }
+
+    private ProviderConfig getProvider(ApplicationConfig applicationConfig, RegistryConfig registryConfig){
         ProviderConfig providerConfig = new ProviderConfig();
         providerConfig.setTimeout(1000);
         providerConfig.setRetries(1);
         providerConfig.setDelay(-1);
         providerConfig.setApplication(applicationConfig);
         providerConfig.setRegistry(registryConfig);
-        providerConfig.setProtocol(protocolConfig2);
         return providerConfig;
     }
 }
